@@ -3,6 +3,18 @@ session_start();
 if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
 }
+
+if (isset($_POST['add'])) {
+    
+    if (isset($_SESSION['cesta']['cod'])) {
+        $_SESSION['cesta']['cod']['cantidad']++;
+    }
+    else{
+        $_SESSION['cesta']['cod']['cantidad']=1;
+    }
+
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +33,17 @@ if (!isset($_SESSION['usuario'])) {
         <div id="cesta">
             <h3><img src="cesta.jpg" alt="Cesta" width="24" height="21">Cesta</h3>
             <hr />
+
+
+            <form action="" method="POST">
+                <input type="submit" name="vaciar" value="Vaciar Cesta">
+            </form>
+            <form action="cesta.php" method="POST">
+                <input type="submit" name="comprar" value="Comprar">
+            </form>
+
+        </div>
+        <div id="productos">
             <?php
 
             try {
@@ -32,21 +55,22 @@ if (!isset($_SESSION['usuario'])) {
                 echo 'Error:' . $exc->getMessage(); // error del servidor de bd
             }
 
-            $result = $conex->query("SELECT * from usuario where usuario='$_POST[usuario]' and password='" . md5($_POST["password"]) . "'");
+            $result = $conex->query("SELECT * from producto");
 
-
-
+            while ($obj = $result->fetch(PDO::FETCH_OBJ)) {
             ?>
-            <form action="" method="POST">
-                <input type="submit" name="vaciar" value="Vaciar Cesta">
-            </form>
-            <form action="cesta.php" method="POST">
-                <input type="submit" name="comprar" value="Comprar">
-            </form>
-
-        </div>
-        <div id="productos">
+                <form action="" method="POST">
+                    <input type="submit" name="add" value="Añadir">
+                    
+                    <?php
+                    echo 'Producto: ';
+                    echo '<input type="hidden" name="cod" value="'.$obj->cod.'">';
+                    echo '<input type="text" name="nombre_corto" value="'.$obj->nombre_corto.'" readonly>';
+                    echo ' Precio: <input type="text" name="PVP" value="'.$obj->PVP.'" readonly>€';
+                    ?>
+                </form>
             <?php
+            }
 
 
             ?>
