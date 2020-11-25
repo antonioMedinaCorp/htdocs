@@ -24,7 +24,7 @@ if (isset($_POST['enviar']) && !empty($_POST['usuario']) && !empty($_POST['passw
 
     $result = $conex->query("SELECT * from usuario where usuario='$_POST[usuario]' and password='" . md5($_POST["password"]) . "'");
 
-    if ($result->rowCount() != 0) {
+    if ($result->rowCount()) {
         session_start();
         $_SESSION['usuario'] = $_POST['usuario'];
         $_SESSION['password'] = $_POST['password'];
