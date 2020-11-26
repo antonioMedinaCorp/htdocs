@@ -4,16 +4,26 @@ if (!isset($_SESSION['usuario'])) {
     header('Location: login.php');
 }
 
+//Añadir elemento a la cesta
 if (isset($_POST['add'])) {
-    
-    if (isset($_SESSION['cesta']['cod'])) {
-        $_SESSION['cesta']['cod']['cantidad']++;
-    }
-    else{
-        $_SESSION['cesta']['cod']['cantidad']=1;
+
+    if (isset($_SESSION['cesta'][$_POST['add']])) {
+        $cantidad = $_SESSION['cesta'][$_POST['add']]['cantidad'];
+        $cantidad++;
+    } else {
+        $cantidad = 1;
     }
 
+    $data = array('nombre_corto' => $_POST['nombre_corto'], 'PVP' => $_POST['PVP'], 'cantidad' => $cantidad);
+
+    $_SESSION['cesta'][$_POST['add']] = $data;
 }
+
+//Borrar variable cesta si se pulsa el botón vaciar
+if (isset($_POST['vaciar'])) {
+    unset($_SESSION['cesta']);
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -32,6 +42,16 @@ if (isset($_POST['add'])) {
         </div>
         <div id="cesta">
             <h3><img src="cesta.jpg" alt="Cesta" width="24" height="21">Cesta</h3>
+
+            <?php
+            if (isset($_SESSION['cesta'])) {
+                foreach ($_SESSION['cesta'] as $key => $value) {
+                    echo $value['nombre_corto'] . " X " . $value['cantidad'] . "<br>";
+                }
+            }
+
+            ?>
+
             <hr />
 
 
@@ -60,13 +80,13 @@ if (isset($_POST['add'])) {
             while ($obj = $result->fetch(PDO::FETCH_OBJ)) {
             ?>
                 <form action="" method="POST">
-                    <input type="submit" name="add" value="Añadir">
-                    
+
                     <?php
-                    echo 'Producto: ';
-                    echo '<input type="hidden" name="cod" value="'.$obj->cod.'">';
-                    echo '<input type="text" name="nombre_corto" value="'.$obj->nombre_corto.'" readonly>';
-                    echo ' Precio: <input type="text" name="PVP" value="'.$obj->PVP.'" readonly>€';
+                    echo '<button type="submit" name="add" value="' . $obj->cod . '">Añadir</button>';
+                    echo ' Producto: ';
+                    echo '<input type="hidden" name="cod" value="' . $obj->cod . '">';
+                    echo '<input type="text" name="nombre_corto" value="' . $obj->nombre_corto . '" readonly>';
+                    echo ' Precio: <input type="text" name="PVP" value="' . $obj->PVP . '" readonly>€';
                     ?>
                 </form>
             <?php

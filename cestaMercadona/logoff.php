@@ -1,6 +1,12 @@
 <?php
-setcookie(session_name(), "", time() - 3600, "/");
-session_unset();
-session_destroy();
+session_start();
 
-header('location: login.php');
+if(!isset($_SESSION['usuario'])){
+    header("location:login.php");
+}else{
+    
+    setcookie('PHPSESSID', "", time() - 3600, "/");
+    session_unset();
+    session_destroy();
+    header("Location: login.php");
+}

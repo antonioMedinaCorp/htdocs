@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,11 +17,16 @@
             </div>
             <div id="productos">
                 <?php
-                
+                $precioTotal = 0;
+                foreach ($_SESSION['cesta'] as $key => $value) {
+                    echo $key."\t".$value['nombre_corto'] . "\t".$value['PVP']."€ X " . $value['cantidad']. "<br>";
+
+                    $precioTotal += $value['PVP'] * $value['cantidad'];
+                }
 
                 ?>
                 <hr />
-                <p><span class="pagar">Precio total: 		€</span></p>
+                <p><span class="pagar">Precio total: <?php echo $precioTotal ?>	€</span></p>
                 <form action="pagar.php" method="POST">
                     <p><span class="pagar"><input type="submit" name="pagar" value="Pagar"</span></p>
                 </form>
