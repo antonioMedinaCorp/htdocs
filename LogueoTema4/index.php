@@ -31,9 +31,9 @@ if (isset($_POST['enviar']) && !empty($_POST['usuario']) && !empty($_POST['passw
     $result = $conex->query("SELECT * from perfil_usuario where user='$_POST[usuario]' and pass='" . md5($_POST["password"]) . "'");
 
 
-    if(!isset($_COOKIE['intentos'])){
-        $try = 3;
-        setcookie('intentos', $try, time() + 3600);
+    if(!isset($_SESSION['intentos'])){
+        
+        $_SESSION['intentos'] = 3;
     }
 
 
@@ -41,14 +41,20 @@ if (isset($_POST['enviar']) && !empty($_POST['usuario']) && !empty($_POST['passw
         session_start();
         $_SESSION['usuario'] = $_POST['usuario'];
         $_SESSION['password'] = $_POST['password'];
-        header('Location: productos.php');
+        header('Location: datos.php');
     }
     else{
-        $_COOKIE['intentos']--;
+        $_SESSION['intentos']--;
         echo '<h3>Usuario y/o contraseña incorrectos</h3>';
-        echo 'Intentos Restantes: '. $_COOKIE['intentos'];
+        echo 'Intentos Restantes: '. $_SESSION['intentos'];
     }
 
+
+
+}
+
+if (isset($_SESSION['intentos']) && $_SESSION['intentos'] <= 0) {
+    header('Location: sinIntentos.php');
 }
 ?>
 <body>
