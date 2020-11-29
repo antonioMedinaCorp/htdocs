@@ -1,6 +1,31 @@
 <?php
 
-$colores = ['red','blue','green','yellow','pink','orange','grey','white'];
+$colores = ['red', 'blue', 'green', 'yellow', 'pink', 'orange', 'grey', 'white'];
+$tipoLetra = ['Calibri', 'Times New Roman', 'Comic Sans'];
+$letraSize = [11,12,13,15,18,22];
+
+if (isset($_POST['enviar'])) {
+    
+    try {
+        $opciones = array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION);
+        $conex = new PDO('mysql:host=localhost; dbname=tema4_logueo; charset=UTF8mb4', 'dwes', 'abc123.', $opciones);
+        $error = $conex->errorInfo();
+    } catch (PDOException $exc) {
+        echo $exc->getTraceAsString(); // error de php
+        echo 'Error:' . $exc->getMessage(); // error del servidor de bd
+    }
+
+    $pass = md5($_POST['pass']);
+    $result = $conex->prepare("INSERT INTO perfil_usuario (nombre, apellidos, direccion, localidad, user, pass, color_letra, color_fondo, tipo_letra, tam_letra) VALUES ('$_POST[nombre]', '$_POST[apellidos]', '$_POST[direccion]', '$_POST[localidad]', '$_POST[user]', '$pass', '$_POST[color_letra]', '$_POST[color_fondo]', '$_POST[tipo_letra]', '$_POST[tam_letra]')");
+
+    if ($result->rowCount()) {
+        header("Location: index.php");
+    }
+    else{
+        echo 'xd manco';
+    }
+
+}
 
 ?>
 
@@ -24,8 +49,8 @@ $colores = ['red','blue','green','yellow','pink','orange','grey','white'];
         <input type="text" name="nombre"><br>
 
         <!-- Apellido -->
-        <label for="apellido">Apellido</label>
-        <input type="text" name="apellido"><br>
+        <label for="apellidos">Apellido</label>
+        <input type="text" name="apellidos"><br>
 
         <!-- Direccion -->
         <label for="direccion">Direccion</label>
@@ -47,10 +72,9 @@ $colores = ['red','blue','green','yellow','pink','orange','grey','white'];
         <select name="color_letra">
             <?php
             foreach ($colores as $key => $value) {
-            
 
-            echo '<option value="'.$value.'">'.$value.'</option>';
-                
+
+                echo '<option value="' . $value . '">' . $value . '</option>';
             }
             ?>
         </select>
@@ -59,12 +83,41 @@ $colores = ['red','blue','green','yellow','pink','orange','grey','white'];
         <select name="color_fondo">
             <?php
             foreach ($colores as $key => $value) {
-            
 
-            echo '<option value="'.$value.'">'.$value.'</option>';
-                
+
+                echo '<option value="' . $value . '">' . $value . '</option>';
             }
             ?>
+
+        </select>
+
+        <label for="tipo_letra">Tipo de Letra</label>
+        <select name="tipo_letra">
+            <?php
+            foreach ($tipoLetra as $key => $value) {
+
+
+                echo '<option value="' . $value . '">' . $value . '</option>';
+            }
+            ?>
+
+        </select>
+        
+        <label for="tam_letra">Tamaño letra</label>
+        <select name="tam_letra">
+            <?php
+            foreach ($letraSize as $key => $value) {
+
+
+                echo '<option value="' . $value . '">' . $value . '</option>';
+            }
+            ?>
+
+        </select>
+        <br>
+
+        <input type="submit" name="enviar" value="aceptar">
+
     </form>
 </body>
 
