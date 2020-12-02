@@ -16,7 +16,7 @@ if (isset($_POST['enviar'])) {
     }
 
     $pass = md5($_POST['pass']);
-    $result = $conex->prepare("INSERT INTO perfil_usuario (nombre, apellidos, direccion, localidad, user, pass, color_letra, color_fondo, tipo_letra, tam_letra) VALUES ('$_POST[nombre]', '$_POST[apellidos]', '$_POST[direccion]', '$_POST[localidad]', '$_POST[user]', '$pass', '$_POST[color_letra]', '$_POST[color_fondo]', '$_POST[tipo_letra]', '$_POST[tam_letra]')");
+    $result = $conex->query("INSERT INTO perfil_usuario (nombre, apellidos, direccion, localidad, user, pass, color_letra, color_fondo, tipo_letra, tam_letra) VALUES ('$_POST[nombre]', '$_POST[apellidos]', '$_POST[direccion]', '$_POST[localidad]', '$_POST[user]', '$pass', '$_POST[color_letra]', '$_POST[color_fondo]', '$_POST[tipo_letra]', '$_POST[tam_letra]')");
 
     if ($result->rowCount()) {
         header("Location: index.php");
