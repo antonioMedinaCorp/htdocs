@@ -16,15 +16,16 @@ class Canario extends Ave {
     
     public function __construct($nombre, $color, $habilidad, $cantaBien) {
         parent::__construct($nombre, $color, $habilidad);
-        $this->$cantaBien = $cantaBien;
+        $this->cantaBien = $cantaBien;
     }
+ 
     
     public function seHaMuerto() {
         if($this->cantaBien){
-            return "hay que pena me da";
+            return "ay que pena me da";
         }
         else{
-            return "weno apañamos otro nopasana";
+            return "asdfasd";
         }
     }
 
