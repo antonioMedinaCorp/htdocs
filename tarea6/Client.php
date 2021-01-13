@@ -22,5 +22,18 @@ echo 'Stock:';
 echo $client->call('getStock', array('codProducto'=>'3DSNG', 'codTienda'=>'2'));
 
 echo '<br>';
-echo'Familias:';
-print_r($client->call('getFamilias',False));
+echo'Familias:<br>';
+$familias = $client->call('getFamilias',array());
+
+foreach ($familias as $value) {
+    echo $value.' <br>';
+}
+
+echo 'Codigos por familia:<br>';
+
+$productos = $client->call('getProductosFamilia',array('codFamilia'=>'NETBOK'));
+
+foreach ($productos as $value) {
+    echo $value.' <br>';
+}
+

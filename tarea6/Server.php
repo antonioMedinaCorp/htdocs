@@ -21,7 +21,9 @@ $server->register('getPVP', array('codProducto' => "xsd:string"), array("return"
 
 $server->register('getStock', array('codProducto' => "xsd:string", 'codTienda' => "xsd:string"), array("return" => "xsd:string"), FALSE, FALSE, FALSE, FALSE, "getStock");
 
-$server->register('getFamilias', array(), array("return" => "xsd:Array"), FALSE, FALSE, FALSE, FALSE, "getFamilias");
+$server->register('getFamilias', array(), array("return" => "xsd:Array"), FALSE, FALSE, FALSE, FALSE, "Devuelve array");
+
+$server->register('getProductosFamilia', array('codFamilia' => "xsd:string"), array("return" => "xsd:Array"), FALSE, FALSE, FALSE, FALSE, "getProductosFamilia");
 
 //Declarar las funciones
 
@@ -72,16 +74,40 @@ function getFamilias() {
     try {
         $conex = new Conexion();
         $result = $conex->query("SELECT cod FROM familia");
-
+        $familias = [];
         if ($result->rowCount()) {
-
-            $familias=[];
+            
             while($registro = $result->fetchObject()){
-                
-                $familias = clone($registro);
+                foreach ($registro as $value) {
+                array_push($familias, $value);    
+                }
                 
             }
             return $familias;
+        }
+        unset($result);
+        unset($conex);
+    } catch (PDOException $exc) {
+        $errores[] = $exc->getMessage();
+        die('Error en bbdd');
+    }
+}
+
+function getProductosFamilia($codFamilia) {
+
+    try {
+        $conex = new Conexion();
+        $result = $conex->query("SELECT cod FROM producto where familia='$codFamilia'");
+        $codigoArray = [];
+        if ($result->rowCount()) {
+            
+            while($registro = $result->fetchObject()){
+                foreach ($registro as $value) {
+                array_push($codigoArray, $value);    
+                }
+                
+            }
+            return $codigoArray;
         }
         unset($result);
         unset($conex);
