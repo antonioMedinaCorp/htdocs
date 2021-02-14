@@ -34,7 +34,7 @@
 
             <!-- Page Content -->
             <main>
-                <h1>Bienvenido a myCars {{Auth::user()->name}}</h1>
+                <h1>{{__('message.welcome')}} {{Auth::user()->name}}</h1>
                 <div class="container">
                     @yield('content')
                 </div>

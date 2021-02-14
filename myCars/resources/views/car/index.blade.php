@@ -8,7 +8,7 @@
 
     @section('content')
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }} Contenido de index blade
+            {{ __('Dashboard') }}
         </h2>
         <table class="table">
             <thead>
@@ -28,7 +28,7 @@
                 <td>{{$myCar->marca}}</td>
                 <td>{{$myCar->modelo}}</td>
                 <td><a href="{{url('car/'. $myCar->id)}}" class="btn btn-primary" >Detalle</a></td>
-                <td><a href="{{url('car/' . $myCar->id . '/edit')}}" class="btn btn-secondary">Editar</a></td>
+                <td><a href="{{url('car/' . $myCar->id .'/edit')}}" class="btn btn-secondary">Editar</a></td>
 
                 <td>
                     <form action="{{url('car/'. $myCar->id)}}" method="post">

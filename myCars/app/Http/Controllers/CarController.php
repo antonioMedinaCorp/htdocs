@@ -65,7 +65,7 @@ class CarController extends Controller
 
         $request->file('foto')->storeAs('public/img',$nombreFoto);
 
-        return view('car.index');
+        return redirect()->route('car.index');
 
 
 
@@ -80,7 +80,9 @@ class CarController extends Controller
      */
     public function show($id)
     {
-        return 'vista show';
+        $myCar = Car::FindorFail($id);
+        $url = 'storage/img/';
+        return view('car.show')->with('myCar', $myCar)->with('url', $url);
     }
 
     /**
@@ -91,7 +93,9 @@ class CarController extends Controller
      */
     public function edit($id)
     {
-        return 'vista editar';
+        $myCar = Car::FindorFail($id);
+        $url = 'storage/img/';
+        return view('car.edit')->with('myCar', $myCar)->with('url', $url);
     }
 
     /**
@@ -103,7 +107,40 @@ class CarController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return 'vista update';
+        $validated=$request->validate([
+            'matricula'=> 'required',
+            'marca' => 'required',
+            'modelo' => 'required',
+            'foto' => 'required|image',
+        ]);
+
+        $newcar = Car::FindorFail($id);
+        $newcar->matricula = $request->matricula;
+        $newcar->marca = $request->marca;
+        $newcar->modelo = $request->modelo;
+        $newcar->year = $request->year;
+        $newcar->color = $request->color;
+        $newcar->fecha_ultima_revision = $request->ult_revision;
+        $newcar->precio = $request->precio;
+        $newcar->user_id = Auth::id();
+
+        if (is_uploaded_file($request->foto)){
+            $nombreFoto = time().'_'.$request->file('foto')->getClientOriginalName();
+
+            $newcar->foto = $nombreFoto;
+
+            $request->file('foto')->storeAs('public/img',$nombreFoto);
+        }
+
+
+
+        $newcar->save();
+
+
+        return redirect()->route('car.index');
+
+
+
     }
 
     /**
